@@ -1,111 +1,126 @@
-# 🏟️ CrowdFlow AI Platform
+# 🏟️ CrowdFlow AI: Smart Stadium Experience Platform
 
-**CrowdFlow AI** is a production-ready, cloud-native Smart Stadium Experience Platform. It is designed to mitigate massive crowd congestion, intelligently reroute attendees to low-density zones, translate critical localized instructions, and provide a seamless interactive experience for sporting events.
-
----
-
-## ✨ Key Features
-
-- **🔴 Intelligent Cloud Vision Incident Reporting**
-  Attendees can snap a photo of a congested area. The frontend compresses the image locally using an HTML5 Canvas algorithm (reducing 12MB payloads drastically to ~150KB) and submits it to the Google Cloud Vision API. The backend auto-labels the density (`🟢 LOW DENSITY` to `🔴 OVERCROWDED`) and posts it directly to the Live Firestore Incident Feed.
-  
-- **🤖 Vertex AI Gemini Chatbot App**
-  An integrated LLM assistant powered by Vertex AI Gemini provides smart, responsive answers for queue queries and best routes. When offline, it instantly cascades to a resilient local matching algorithm.
-  
-- **🌐 Dynamic Multi-Lingual Translation**
-  The platform instantly processes the entire UI state (labels, chatbot, dynamic feed) into 6 regional languages (Hindi, Bengali, Telugu, Marathi, Tamil, Gujarati) flawlessly.
-
-- **📍 Real-Time Indoor Route Guidance**
-  Dual-input Smart Routing via Google Maps API allows fans to dynamically map the quickest path to restrooms, VIP parking, or food stalls, actively shifting flow away from bottlenecked `hot-zones`.
-
-- **🎨 Accessible UI & Dynamic Theming**
-  Achieves a strictly compliant WCAG AA 100% Accessibility score featuring ARIA-live narrations, role dialogs, keyboard focus-loops, screen-reader `skip-link` bypass, and dynamic `index.css` CSS-variable driven Light/Dark mode.
+**CrowdFlow AI** is a cutting-edge, cloud-native platform designed to revolutionize the fan experience at large-scale venues. By combining Real-Time Computer Vision, Generative AI, and Geo-Spatial Rerouting, we mitigate congestion and optimize crowd movement in real-time.
 
 ---
 
-## ☁️ Google Cloud Services Utilized
+## 🏗️ System Architecture
 
-This project leverages a wide ecosystem of Google services to function efficiently and securely at scale:
-
-1. **Google Vertex AI (Gemini 1.5 Pro)** — Powers the generative AI Smart Assistant Chatbot and predictive analytics.
-2. **Google Cloud Vision API** — Automatically interprets crowd densities from user-captured photos to assign risk profiles.
-3. **Google Cloud Translation API** — Dynamically hooks into the text-layer to deploy 6 Indian Regional Languages live.
-4. **Google Maps Platform** — Computes `Directions API` routes and integrates the `Places API` for indoor venue mapping.
-5. **Google Cloud Run** — Serverless high-performance containerized hosting of the app and backend logic.
-6. **Google Cloud Pub/Sub** — (Architecture prepped) For ingesting high-throughput sensor telemetry.
-7. **Google Cloud Storage** — Hosts uploaded image incident reporting (`[CONFIGURED_BUCKET]`).
-8. **Firebase Firestore** — Powers the Live Notification Feeds instantly to all attendees using WebSockets.
-9. **Firebase Auth** — Secures the user interaction pipeline using Google Sign-In protocol.
-
----
-
-## 🏗️ Architecture & Cloud Infrastructure
-
-Built for deployment on **Google Cloud Run**, CrowdFlow utilizes a containerized micro-service strategy.
-
-### Backend (`/backend`)
-- **Express.js API** wrapped in `express-validator` and `helmet.js`.
-- Security enforced via rate limiters (`apiLimiter`) and origin CORS routing.
-- **Node.js** base executing securely under an Alpine `appuser` locked system layer.
-- **GCP Integrations:** Pub/Sub (sensors), Vertex AI, Storage Bucket, Vision SDK.
-
-### Frontend (`/src`)
-- **React + Vite** SPA.
-- Uses Firebase for JWT Auth and Firestore web-sockets for the Live Notification Feed.
-- Served through an ultra-light **Nginx** reverse-proxy, ensuring secure Cross-Site scripting headers and deep gzip compression.
+```mermaid
+graph TD
+    A[Attendee Phone] -->|Upload Image| B[Cloud Vision API]
+    A -->|Ask Question| C[Vertex AI Gemini]
+    B -->|Occupancy Label| D[Express Backend]
+    D -->|Real-time Feed| E[Firebase Firestore]
+    E -->|Live Update| A
+    A -->|Route Request| F[Google Maps API]
+    D -->|Hosting| G[Google Cloud Run]
+```
 
 ---
 
-## 🛠️ Performance & Evaluation Metrics
+## ✨ Full Feature Overview
 
-We systematically improved and refactored the original prototype to secure a perfect architectural baseline suitable for elite Hackathon environments:
+### 1. 👁️ Cloud Vision Analytics
+- **Local Compression**: Images are compressed via HTML5 Canvas (12MB -> 150KB) to ensure high-speed uploads in crowded stadium environments with low bandwidth.
+- **Auto-Labeling**: Integrates with **Google Cloud Vision API** to detect "Person" objects.
+- **Risk Profiles**: Automatically identifies `🔴 OVERCROWDED`, `🟡 MODERATE`, or `🟢 LOW` states based on headcounts.
 
-- ✅ **Code Quality:** **100%**
-- ✅ **Security:** **96%** (Rate limits, locked docker root execution)
-- ✅ **Efficiency:** **100%** (HTML5 Canvas compression)
-- ✅ **Testing Run:** **100%** (Vitest coverage, 19/19 Unit specs passing)
-- ✅ **Accessibility:** **100%** (WCAG AA Certified)
+### 2. 🤖 Gemini AI Smart Assistant
+- **Vertex AI Core**: Uses `gemini-1.5-pro` to answer attendee questions about parking, seating, and restroom queues.
+- **Security**: Prompt engineering ensures the bot stays on task as a stadium assistant.
+- **Resiliency**: Built-in fallback to local logic if the AI service encounters quota limits.
+
+### 3. 🌐 Instant Localized Instructions
+- **Translation API**: One-click switching between **Hindi, Bengali, Telugu, Marathi, Tamil, and Gujarati**.
+- **Real-Time Feed**: All live incident alerts are dynamically translated to the user's preferred language.
+
+### 4. 📍 Smart Rerouting (Maps)
+- Integrated Google Maps with a focus on **Indoor Directionality**.
+- Points of interest (Washrooms, Gates, VIP areas) are dynamically highlighted based on current congestion levels.
 
 ---
 
-## 🚀 Getting Started Locally
+## 🛠️ Technical Stack
 
-### Prerequisites
-- Node.js (v18 or higher)
-- A Google Cloud Project with Billing / Service Account configurations.
-- API Keys for Google Maps, Firebase, and GCP injected into `.env`.
+- **Frontend**: React 18, Vite, Tailwind CSS, Google Maps SDK, Firebase Web SDK.
+- **Backend**: Node.js, Express, Google Cloud SDK (Vision, Translate, Vertex AI, Storage).
+- **Hosting**: Google Cloud Run (Containerized).
+- **Database**: Firebase Firestore (Real-time NoSQL).
+- **Security**: Express Rate Limiter, Helmet.js, Origin Validation.
 
-### Running the Project `(Development)`
+---
 
-You must run both the backend API and the frontend client simultaneously.
+## 🚀 Detailed Setup Guide
 
+### 1. Google Cloud Project Setup
+1. Create a project at [GCP Console](https://console.cloud.google.com).
+2. **Enable APIs**: 
+   - [x] Cloud Run API
+   - [x] Cloud Vision API
+   - [x] Cloud Translation API
+   - [x] Vertex AI API
+   - [x] Maps JavaScript API & Places API
+3. Create a **Firebase Project** and link it to your GCP project.
+
+### 2. Local Environment Configuration
+Create a `.env` in the **root** folder:
+```env
+VITE_MAPS_API_KEY=your_key_here
+VITE_BACKEND_URL=http://localhost:8080
+```
+
+Create a `.env` in the **backend** folder:
+```env
+PORT=8080
+GOOGLE_CLOUD_PROJECT=your_project_id
+FRONTEND_ORIGIN=http://localhost:5173
+```
+
+### 3. Local Development
 ```bash
-# 1. Start the Backend API (Port 8080)
+# Terminal 1: Backend
 cd backend
 npm install
+gcloud auth application-default login # CRITICAL for local Cloud Vision/Vertex AI
 npm start
 
-# 2. Start the Frontend App (Port 5173)
-# In a new terminal:
-cd ..
+# Terminal 2: Frontend
 npm install
 npm run dev
 ```
 
-### Running Tests 
-CrowdFlow utilizes `vitest` for the entire ecosystem.
-```bash
-npx vitest run
-```
+---
+
+## ☁️ Deployment Playbook (Cloud Run)
+
+The project includes a unified `deploy.sh` script for Google Cloud Shell.
+
+### Steps to Deploy:
+1. Open [Google Cloud Shell](https://shell.cloud.google.com/).
+2. Clone/Pull your repo: `git pull origin main`.
+3. Run: `bash deploy.sh`.
+
+### 🔍 Troubleshooting Common Errors:
+- **`Quota Exceeded`**: Change the `REGION` in `deploy.sh` to `us-central1`.
+- **`Maps not loading`**: Ensure the API key restriction in GCP allows `http://localhost:*/*` and your Cloud Run domain.
+- **`Backend Connection Error`**: Ensure `FRONTEND_ORIGIN` in the Backend environment matches your live site URL.
 
 ---
 
-## ☁️ Deployment to Google Cloud Run
+## 📂 Directory Structure
 
-To deploy this project to the cloud, use the provided custom bash script. This script automatically builds the images, provisions the memory, connects CORS dependencies dynamically, and ships to Cloud Run via Artifact Registry.
-
-```bash
-bash deploy.sh
+```text
+├── backend/            # Express.js API
+│   ├── src/
+│   │   ├── services/   # GCP SDK Integrations (Vision, Vertex, etc.)
+│   │   └── server.js   # Main API Entry
+│   └── Dockerfile      # Backend Container Config
+├── src/                # React Frontend
+│   ├── components/     # UI Modules
+│   ├── assets/         # Static Media
+│   └── App.jsx         # Main Application Logic
+├── Dockerfile          # Frontend Container Config
+├── deploy.sh           # Unified GCP Deployment Script
+└── README.md           # This Document
 ```
-
-**Enjoy avoiding the crowds with CrowdFlow!**
