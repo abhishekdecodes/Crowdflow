@@ -46,7 +46,7 @@ gcloud run deploy $FRONTEND_SERVICE `
   --source . `
   --region $REGION `
   --platform managed `
-  --update-env-vars "VITE_MAPS_API_KEY=$API_KEY,VITE_BACKEND_URL=$BACKEND_URL" `
+  --set-build-env-vars "VITE_MAPS_API_KEY=$API_KEY,VITE_BACKEND_URL=$BACKEND_URL" `
   --allow-unauthenticated `
   --memory 256Mi `
   --cpu 1 `

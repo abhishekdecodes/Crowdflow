@@ -51,8 +51,7 @@ gcloud run deploy ${FRONTEND_SERVICE} \
   --source . \
   --region ${REGION} \
   --platform managed \
-  --build-arg "VITE_MAPS_API_KEY=${VITE_MAPS_API_KEY:-AIzaSyBold_lXv7eDFEAeZSuXjGa_6ApulM2N3Q}" \
-  --build-arg "VITE_BACKEND_URL=${BACKEND_URL}" \
+  --set-build-env-vars "VITE_MAPS_API_KEY=${VITE_MAPS_API_KEY:-AIzaSyBold_lXv7eDFEAeZSuXjGa_6ApulM2N3Q},VITE_BACKEND_URL=${BACKEND_URL}" \
   --allow-unauthenticated \
   --memory 256Mi \
   --cpu 1 \
