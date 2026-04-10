@@ -52,6 +52,13 @@ let redisClient;
     try { await redisClient.connect(); } catch (e) {}
 })();
 
+// ── Root Status ───────────────────────────────────────────────
+app.get('/', (req, res) => res.status(200).json({ 
+    success: true, 
+    message: '🚀 CrowdFlow AI Backend is active', 
+    endpoints: ['/health', '/api/predict', '/api/chat', '/api/vision/count'] 
+}));
+
 // ── Health Check ──────────────────────────────────────────────
 app.get('/health', (req, res) => res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() }));
 
