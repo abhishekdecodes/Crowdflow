@@ -204,6 +204,8 @@ function App() {
     libraries: ['places']
   });
 
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://crowdflow-backend-871500717560.us-central1.run.app';
+
   // Apply theme to <html>
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
@@ -285,13 +287,13 @@ function App() {
     const b64 = await compressImage(file);
     
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/vision/count`, {
+      const res = await fetch(`${BACKEND_URL}/api/vision/count`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ base64Image: b64 })
       });
       const data = await res.json();
       setCameraCount(data.personCount);
-    } catch { } finally { setIsUploading(false); }
+    } catch (err) { console.error('Vision Count Error:', err); } finally { setIsUploading(false); }
   };
 
   // ── Incident report (Vision scan + GCS upload) ───────────────
@@ -306,7 +308,7 @@ function App() {
     const b64 = await compressImage(file);
 
     try {
-      const visionRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/vision/count`, {
+      const visionRes = await fetch(`${BACKEND_URL}/api/vision/count`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ base64Image: b64 })
       });
@@ -314,18 +316,20 @@ function App() {
       const count = vd.personCount ?? 0;
       currentLabel = count >= 15 ? '🔴 OVERCROWDED' : count >= 6 ? '🟡 MODERATE CROWD' : '🟢 LOW DENSITY';
       setVisionResult({ count, label: currentLabel });
-    } catch { 
+    } catch (err) { 
+      console.error('Incident Vision Error:', err);
       currentLabel = '⚪ Vision API offline';
       setVisionResult({ count: '?', label: currentLabel }); 
     }
 
     try {
-      await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/incident/report`, {
+      await fetch(`${BACKEND_URL}/api/incident/report`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ base64Image: b64, description: incidentDesc, label: currentLabel })
       });
       setIncidentDesc('');
-    } catch {
+    } catch (err) {
+      console.error('Incident Report Error:', err);
       // Fallback: Store directly into Firestore if backend storage API is completely offline
       try {
         await addDoc(collection(db, 'incidents'), {
@@ -348,13 +352,14 @@ function App() {
     setChatLog(prev => [...prev, { sender: 'user', text: msg }]);
     setChatInput(''); setIsChatLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/chat`, {
+      const res = await fetch(`${BACKEND_URL}/api/chat`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: msg })
       });
       const data = await res.json();
       setChatLog(prev => [...prev, { sender: 'bot', text: data.reply || getSmartResponse(msg) }]);
-    } catch {
+    } catch (err) {
+      console.error('Chat Error:', err);
       setTimeout(() => setChatLog(prev => [...prev, { sender: 'bot', text: getSmartResponse(msg) }]), 500);
     } finally { setIsChatLoading(false); }
   };
