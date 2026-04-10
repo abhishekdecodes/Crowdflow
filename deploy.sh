@@ -6,8 +6,8 @@
 
 set -e  # Exit on any error
 
-PROJECT_ID="movify-dae45"
-REGION="asia-south1"          # Mumbai — closest to Pune
+PROJECT_ID="genabhi"
+REGION="us-central1"          # Unified with user's Cloud Run region
 BACKEND_SERVICE="crowdflow-backend"
 FRONTEND_SERVICE="crowdflow-frontend"
 IMAGE_REGISTRY="gcr.io/${PROJECT_ID}"
@@ -51,7 +51,7 @@ gcloud run deploy ${FRONTEND_SERVICE} \
   --source . \
   --region ${REGION} \
   --platform managed \
-  --build-arg "VITE_MAPS_API_KEY=${VITE_MAPS_API_KEY:-AIzaSyApmiSTVkhLyr-T4vhkjxnM6mR_cyTcyUY}" \
+  --build-arg "VITE_MAPS_API_KEY=${VITE_MAPS_API_KEY:-AIzaSyCUhPCcq9u4nKxTBaZl9OU0lomJ8YYqAF0}" \
   --build-arg "VITE_BACKEND_URL=${BACKEND_URL}" \
   --allow-unauthenticated \
   --memory 256Mi \
