@@ -8,7 +8,7 @@ WORKDIR /app
 
 # Copy deps first for better layer caching
 COPY package*.json ./
-RUN npm ci --omit=dev && npm cache clean --force
+RUN npm install --omit=dev && npm cache clean --force
 
 COPY --chown=appuser:appgroup src ./src
 

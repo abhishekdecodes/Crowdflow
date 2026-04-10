@@ -3,7 +3,7 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 # Accept build-time env vars for Vite (injected at cloud build time)
 ARG VITE_MAPS_API_KEY
