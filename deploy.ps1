@@ -1,7 +1,7 @@
 $ErrorActionPreference = "Stop"
 
-$PROJECT_ID = "genabhi"
-$REGION = "us-central1"
+$PROJECT_ID = "movify-dae45"
+$REGION = "asia-south1"
 $BACKEND_SERVICE = "crowdflow-backend"
 $FRONTEND_SERVICE = "crowdflow-frontend"
 
@@ -15,7 +15,7 @@ Write-Host "Region  : $REGION"
 Write-Host ""
 
 # Load VITE_MAPS_API_KEY from .env locally
-$API_KEY = "AIzaSyCUhPCcq9u4nKxTBaZl9OU0lomJ8YYqAF0"
+$API_KEY = "AIzaSyBold_lXv7eDFEAeZSuXjGa_6ApulM2N3Q"
 if (Test-Path -Path "f:\asna\.env") {
     $envContent = Get-Content "f:\asna\.env"
     foreach ($line in $envContent) {
