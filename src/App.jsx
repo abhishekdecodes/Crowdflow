@@ -200,7 +200,7 @@ function App() {
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: import.meta.env.VITE_MAPS_API_KEY,
+    googleMapsApiKey: import.meta.env.VITE_MAPS_API_KEY || 'AIzaSyApmiSTVkhLyr-T4vhkjxnM6mR_cyTcyUY',
     libraries: ['places']
   });
 
