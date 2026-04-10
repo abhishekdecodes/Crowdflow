@@ -1,7 +1,7 @@
 $ErrorActionPreference = "Stop"
 
 $PROJECT_ID = "movify-dae45"
-$REGION = "asia-south1"
+$REGION = "us-central1"
 $BACKEND_SERVICE = "crowdflow-backend"
 $FRONTEND_SERVICE = "crowdflow-frontend"
 

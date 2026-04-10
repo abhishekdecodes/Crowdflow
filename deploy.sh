@@ -7,7 +7,7 @@
 set -e  # Exit on any error
 
 PROJECT_ID="movify-dae45"
-REGION="asia-south1"          # Mumbai — closest to Pune project
+REGION="us-central1"          # Low-quota fix: Switched from asia-south1
 BACKEND_SERVICE="crowdflow-backend"
 FRONTEND_SERVICE="crowdflow-frontend"
 IMAGE_REGISTRY="gcr.io/${PROJECT_ID}"
