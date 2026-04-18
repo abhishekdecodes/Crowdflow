@@ -6,7 +6,7 @@
 
 set -e  # Exit on any error
 
-PROJECT_ID="movify-dae45"
+PROJECT_ID="navigato-94e1b"
 REGION="us-central1"          # Low-quota fix: Switched from asia-south1
 BACKEND_SERVICE="crowdflow-backend"
 FRONTEND_SERVICE="crowdflow-frontend"
