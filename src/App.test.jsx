@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent } from '@testing-library/react';
 
 // Mock Firebase so tests run without real GCP credentials
 vi.mock('./firebase', () => ({
@@ -39,7 +38,7 @@ describe('CrowdFlow App', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    global.fetch = vi.fn();
+    globalThis.fetch = vi.fn();
   });
 
   it('renders the CrowdFlow title', () => {

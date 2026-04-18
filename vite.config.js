@@ -9,5 +9,6 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/setupTests.js',
     css: true,
+    exclude: ['node_modules', 'dist', '.idea', '.git', '.cache', 'backend/**'],
   },
 })

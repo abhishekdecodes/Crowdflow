@@ -12,7 +12,15 @@ const app = express();
 
 // ── Security Headers ──────────────────────────────────────────
 app.use(helmet({
-    contentSecurityPolicy: false // Managed by Nginx in production
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:", "https:"],
+            connectSrc: ["'self'", "https:"]
+        }
+    }
 }));
 
 // ── Secure CORS ───────────────────────────────────────────────
@@ -158,6 +166,8 @@ try {
 }
 
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log(`✅ CrowdFlow backend running on port ${PORT}`));
-
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(PORT, () => console.log(`✅ CrowdFlow backend running on port ${PORT}`));
+}
 module.exports = app; // Export for testing
+

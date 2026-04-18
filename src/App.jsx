@@ -172,8 +172,6 @@ function App() {
   const [isTranslating, setIsTranslating] = useState(false);
 
   // Vision / Incident
-  const [cameraCount, setCameraCount] = useState(null);
-  const [isUploading, setIsUploading] = useState(false);
   const [incidentDesc, setIncidentDesc] = useState('');
   const [isReporting, setIsReporting] = useState(false);
   const [visionResult, setVisionResult] = useState(null);
@@ -216,7 +214,7 @@ function App() {
     const sliderTimer = setInterval(() => setSliderIndex(i => (i + 1) % SLIDER_MESSAGES.length), 3500);
     const notifTimer = setInterval(() => {
       const fresh = randomNotifs();
-      setNotifications(prev => {
+      setNotifications(() => {
         // Re-translate with current lang if needed
         return fresh;
       });
@@ -277,24 +275,7 @@ function App() {
     }
   }, []);
 
-  // ── Image upload (Vision count only) ─────────────────────────
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setIsUploading(true);
-    
-    // Compress image to < 200KB before network request
-    const b64 = await compressImage(file);
-    
-    try {
-      const res = await fetch(`${BACKEND_URL}/api/vision/count`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ base64Image: b64 })
-      });
-      const data = await res.json();
-      setCameraCount(data.personCount);
-    } catch (err) { console.error('Vision Count Error:', err); } finally { setIsUploading(false); }
-  };
+
 
   // ── Incident report (Vision scan + GCS upload) ───────────────
   const handleIncidentReport = async (e) => {
@@ -386,7 +367,7 @@ function App() {
             // eslint-disable-next-line no-undef
             const r = await ds.route({ origin, destination: results[0].geometry.location, travelMode: google.maps.TravelMode.DRIVING });
             setDirectionsResponse(r);
-          } catch { }
+          } catch (err) { console.error('Route error', err); }
         }
         setIsRouting(false);
       });
@@ -396,7 +377,7 @@ function App() {
         // eslint-disable-next-line no-undef
         const r = await ds.route({ origin, destination, travelMode: google.maps.TravelMode.DRIVING });
         setDirectionsResponse(r);
-      } catch { }
+      } catch (err) { console.error('Route error', err); }
       setIsRouting(false);
     }
   };

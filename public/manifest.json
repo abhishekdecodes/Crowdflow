@@ -1,0 +1,16 @@
+{
+  "short_name": "CrowdFlow",
+  "name": "CrowdFlow AI Platform",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "description": "Smart stadium crowd management platform built with Gemini and Google Vision."
+}
